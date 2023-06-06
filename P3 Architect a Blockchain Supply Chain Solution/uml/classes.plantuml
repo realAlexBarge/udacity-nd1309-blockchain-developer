@@ -1,0 +1,155 @@
+@startuml
+
+class Ownable {
+    - origOwner: address
+    -- Events --
+    + TransferOwnership(oldOwner: address, newOwner: address)
+
+    + constructor()
+    + owner(): address
+    + onlyOwner(): modifier
+    + isOwner(): bool
+    + renounceOwnership(): onlyOwner
+    + transferOwnership(newOwner: address): onlyOwner
+    - _transferOwnership(newOwner: address): internal
+}
+
+class Roles {
+  - bearer: mapping(address => bool)
+  + add(role: Role storage, account: address): void
+  + remove(role: Role storage, account: address): void
+  + has(role: Role storage, account: address): bool
+}
+
+class RetailerRole {
+  + RetailerAdded(account: address): event
+  + RetailerRemoved(account: address): event
+  - retailers: Role
+  + isRetailer(account: address): bool
+  + addRetailer(account: address): onlyRetailer
+  + renounceRetailer(): void
+  - _addRetailer(account: address): internal
+  - _removeRetailer(account: address): internal
+}
+
+class FarmerRole {
+  + FarmerAdded(account: address): event
+  + FarmerRemoved(account: address): event
+  - farmers: Role
+  + isFarmer(account: address): bool
+  + addFarmer(account: address): onlyFarmer
+  + renounceFarmer(): void
+  - _addFarmer(account: address): internal
+  - _removeFarmer(account: address): internal
+}
+
+class DistributorRole {
+  + DistributorAdded(account: address): event
+  + DistributorRemoved(account: address): event
+  - distributors: Role
+  + isDistributor(account: address): bool
+  + addDistributor(account: address): onlyDistributor
+  + renounceDistributor(): void
+  - _addDistributor(account: address): internal
+  - _removeDistributor(account: address): internal
+}
+
+class ConsumerRole {
+  + ConsumerAdded(account: address): event
+  + ConsumerRemoved(account: address): event
+  - consumers: Role
+  + isConsumer(account: address): bool
+  + addConsumer(account: address): onlyConsumer
+  + renounceConsumer(): void
+  - _addConsumer(account: address): internal
+  - _removeConsumer(account: address): internal
+}
+
+class SupplyChain {
+  - contractOwner: address
+  - upc: uint
+  - sku: uint
+  - items: mapping(uint => Item)
+  - itemsHistory: mapping(uint => string[])
+
+  + Harvested(uint upc): event
+  + Processed(uint upc): event
+  + Packed(uint upc): event
+  + ForSale(uint upc): event
+  + Sold(uint upc): event
+  + Shipped(uint upc): event
+  + Received(uint upc): event
+  + Purchased(uint upc): event
+
+  + onlyOwner(): modifier
+  + verifyCaller(address _address): modifier
+  + paidEnough(uint _price): modifier
+  + checkValue(uint _upc): modifier
+  + harvested(uint _upc): modifier
+  + processed(uint _upc): modifier
+  + packed(uint _upc): modifier
+  + forSale(uint _upc): modifier
+  + sold(uint _upc): modifier
+  + shipped(uint _upc): modifier
+  + received(uint _upc): modifier
+  + purchased(uint _upc): modifier
+
+  + SupplyChain()
+  + kill()
+  + harvestItem(uint _upc, address _originFarmerID, string _originFarmName, string _originFarmInformation, string _originFarmLatitude, string _originFarmLongitude, string _productNotes): void
+  + processItem(uint _upc): void
+  + packItem(uint _upc): void
+  + sellItem(uint _upc, uint _price): void
+  + buyItem(uint _upc): void
+  + shipItem(uint _upc): void
+  + receiveItem(uint _upc): void
+  + purchaseItem(uint _upc): void
+  + fetchItemBufferOne(uint _upc): (uint, uint, address, address, string, string, string, string)
+  + fetchItemBufferTwo(uint _upc): (uint, uint, uint, string, uint, uint, address, address, address)
+}
+
+class Item {
+  - sku: uint
+  - upc: uint
+  - ownerID: address
+  - originFarmerID: address
+  - originFarmName: string
+  - originFarmInformation: string
+  - originFarmLatitude: string
+  - originFarmLongitude: string
+  - productID: uint
+  - productNotes: string
+  - productPrice: uint
+  - itemState: State
+  - distributorID: address
+  - retailerID: address
+  - consumerID: address
+}
+
+enum State {
+  Harvested
+  Processed
+  Packed
+  ForSale
+  Sold
+  Shipped
+  Received
+  Purchased
+}
+
+SupplyChain --|> Ownable
+SupplyChain --|> FarmerRole
+SupplyChain --|> DistributorRole
+SupplyChain --|> RetailerRole
+SupplyChain --|> ConsumerRole
+
+Roles "1" *-- "1" RetailerRole : contains
+Roles "1" *-- "1" FarmerRole : contains
+Roles "1" *-- "1" DistributorRole : contains
+Roles "1" *-- "1" ConsumerRole : contains
+
+Item o-- State
+
+SupplyChain *-- Item : contains
+
+@enduml

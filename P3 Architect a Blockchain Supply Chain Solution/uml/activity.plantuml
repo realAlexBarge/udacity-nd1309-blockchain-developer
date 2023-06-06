@@ -1,0 +1,21 @@
+@startuml
+partition "Banana Farmer" {
+(*) --> "Harvest"
+"Harvest" --> "Process"
+"Process" --> "Package"
+"Package" --> "Sell"
+}
+
+partition "Banana Distributor" { 
+"Sell" --> "Buy"
+"Buy" --> "Ship"
+}
+
+partition "Banana Retailer" { 
+"Ship" --> "Receive"
+}
+
+partition "Banana Consumer" { 
+"Receive" --> "Purchase"
+}
+@enduml

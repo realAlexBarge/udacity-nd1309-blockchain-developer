@@ -1,0 +1,14 @@
+@startuml
+
+[*] --> Harvested: harvestItem()
+
+Harvested --> Processed: processItem()
+Processed --> Packed: packItem()
+Packed --> ForSale: sellItem()
+ForSale --> Sold: buyItem()
+Sold --> Shipped: shipItem()
+Shipped --> Received: receiveItem()
+Received --> Purchased: purchaseItem()
+Purchased --> [*]
+
+@enduml

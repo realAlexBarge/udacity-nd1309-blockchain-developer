@@ -1,0 +1,20 @@
+@startuml
+actor "Banana Farmer" as farmer
+actor "Banana Distributor" as distributor
+actor "Banana Retailer" as retailer
+actor "Banana Consumer" as consumer
+
+farmer -> farmer: harvestItem()
+farmer -> farmer: processItem()
+farmer -> farmer: packageItem()
+
+farmer -> distributor: sellItem()
+
+distributor -> farmer: buyItem()
+distributor -> retailer: shipItem()
+
+retailer -> distributor: receiveItem()
+
+consumer -> retailer: purchaseItem()
+
+@enduml
