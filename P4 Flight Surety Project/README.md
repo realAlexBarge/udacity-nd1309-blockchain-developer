@@ -11,12 +11,17 @@ To install, download or clone the repo, then:
 `npm install`
 `truffle compile`
 
+## Setup local blockchain
+
+Using TruffleSuite and Ganache to setup a local blockchain 
+
+`ganache -m "mechanic identify buddy guess table bless dove basic possible butter town bus" --wallet.totalAccounts=50`
+
 ## Develop Client
 
 To run truffle tests:
 
-`truffle test ./test/flightSurety.js`
-`truffle test ./test/oracles.js`
+`truffle test`
 
 To use the dapp:
 
@@ -30,7 +35,6 @@ To view dapp:
 ## Develop Server
 
 `npm run server`
-`truffle test ./test/oracles.js`
 
 ## Deploy
 
@@ -43,7 +47,7 @@ Deploy the contents of the ./dapp folder
 
 Truffle v5.9.2 (core: 5.9.2)
 Ganache v7.8.0
-Solidity - ^0.8.0 (solc-js)
+Solidity v0.8.19 (solc-js)
 Node v18.16.0
 Web3.js v1.10.0
 
